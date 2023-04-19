@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Available Books</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div>
+        <a href="/addBook" sec:authorize="hasRole('ROLE_LIBRARIAN')">Add a new book</a>
+    </div>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Author</th>
+            <th>AvailableCopies</th>
+            <th>Actions</th>
+        </tr>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.name}">[book.name]</td>
+            <td th:text="${book.category}">[book.category]</td>
+            <td th:text="${book.author.name}">[book.author.name]</td>
+            <td th:text="${book.availableCopies}">[book.availableCopies]</td>
+            <td>
+<!--                sec:authorize="hasRole('ROLE_LIBRARIAN')"-->
+                <a th:href="@{'/edit/{id}' (id=${book.bookId})}">Edit</a>
+<!--                sec:authorize="hasRole('ROLE_LIBRARIAN')"-->
+                <form method="post" th:action="@{'/delete/{id}' (id=${book.bookId})}">
+                    <button type="submit">Delete</button>
+                </form>
+<!--                sec:authorize="hasRole('ROLE_LIBRARIAN')"-->
+                <form method="post" th:action="@{'/{id}' (id=${book.bookId})}">
+                    <button type="submit">Mark as taken</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+<div>
+    <ul>
+        <li><a href="/static">Home</a></li>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/logout">Logout</a></li>
+    </ul>
+</div>
+</body>
+</html>
